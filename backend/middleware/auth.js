@@ -8,6 +8,7 @@ import jwt from 'jsonwebtoken'
  *
  * NOTE: adjust `payload.id` access if your JWT stores the user id under a different key
  * (e.g. payload.userId or payload._id).
+ * that we want
  */
 export default function auth(req, res, next) {
   try {
