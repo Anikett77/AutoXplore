@@ -1,5 +1,5 @@
 import mongoose, { Schema } from 'mongoose';
-
+//that we want
 const carBookingSubSchema = new Schema({
   status: { type: String, enum: ['pending', 'active', 'completed', 'cancelled', 'upcoming'], default: 'pending' },
   pickupDate: { type: Date, required: true },
