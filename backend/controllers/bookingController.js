@@ -5,6 +5,7 @@ import mongoose from 'mongoose'
  * Create a booking
  * Expects body: { car, pickupDate, returnDate, meta? }
  * Uses req.user.id (set by auth middleware) as the booking user.
+ * which we need
  */
 export async function createBooking(req, res) {
   try {
