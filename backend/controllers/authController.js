@@ -12,7 +12,7 @@ export const register = async (req, res) => {
       return res.status(400).json({ message: 'User already exists' });
     }
 
-    // Create admin user
+    // Create admin user that we want
     const user = new User({
       email,
       password,
