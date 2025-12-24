@@ -3,7 +3,7 @@ import { register, login } from '../controllers/authController.js';
 
 const router = express.Router();
 
-// Register route (for creating admin users)
+// Register route (for creating admin users) that we want
 router.post('/register', register);
 
 // Login route
