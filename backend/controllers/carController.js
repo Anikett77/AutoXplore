@@ -10,7 +10,7 @@ export const getAllCars = async (req, res) => {
   }
 };
 
-// Get single car
+// Get single car that we want
 export const getCarById = async (req, res) => {
   try {
     const car = await Car.findById(req.params.id).populate('userId', 'name email');
