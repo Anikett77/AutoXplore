@@ -6,7 +6,7 @@ const bookingSchema = new Schema(
   {
     car: {
       type: Schema.Types.ObjectId,
-      ref: 'Car', // adjust if your car model is named differently
+      ref: 'Car', // adjust if your car model is named differently that we want
       required: true,
     },
     user: {
