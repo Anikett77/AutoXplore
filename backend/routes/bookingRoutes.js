@@ -4,7 +4,7 @@ import { createBooking, getUserBookings } from '../controllers/bookingController
 
 const router = express.Router()
 
-// Create a booking (authenticated) that we want
+// Create a booking (authenticated) that we want in this
 router.post('/', auth, createBooking)
 
 // Get bookings for current user (authenticated)
