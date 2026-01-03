@@ -4,7 +4,7 @@ import carsRouter from './routes/carRoutes.js';
 
 const app = express();
 app.use(express.json());
-app.use('/', carsRouter); // routes '/' ke andar mount ho rahe hain ok
+app.use('/', carsRouter); // routes '/' ke andar mount ho rahe hain ok.
 
 mongoose.connect('mongodb://localhost:27017/Autoxplore-cluster')
   .then(() => console.log('MongoDB connected'))
