@@ -69,7 +69,7 @@ function Footer() {
           </div>
         </div>
 
-        {/* --- Newsletter --- */}
+        {/* ----- Newsletter ----- */}
         <div>
           <h3 className="text-lg font-semibold text-white mb-3 border-b-2 border-orange-500 inline-block">
             Newsletter
