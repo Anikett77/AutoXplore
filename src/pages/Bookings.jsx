@@ -5,7 +5,7 @@ function Bookings() {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // ✅ Normalize user object (handle both id and _id)
+  // ✅ Normalize user object (handle both id and _id) that we want
   const storedUser = JSON.parse(localStorage.getItem("user"));
   const loggedUser = storedUser
     ? { ...storedUser, _id: storedUser._id || storedUser.id }
