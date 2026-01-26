@@ -1,7 +1,25 @@
 import React, { useState } from "react";
 import BookingModal from "../pages/BookingModal";
 
+// Import static images
+import C1 from "../assets/C1.png";
+import C2 from "../assets/C2.png";
+import C3 from "../assets/C3.png";
+import C4 from "../assets/C4.png";
+import C5 from "../assets/C5.png";
+import C6 from "../assets/C6.png";
+
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
+// Map image names to imported images
+const imageMap = {
+  'C1.png': C1,
+  'C2.png': C2,
+  'C3.png': C3,
+  'C4.png': C4,
+  'C5.png': C5,
+  'C6.png': C6,
+};
 
 function CarCard({ car, onBookingSuccess }) {
   const [showModal, setShowModal] = useState(false);
@@ -11,33 +29,26 @@ function CarCard({ car, onBookingSuccess }) {
   const carType = car.type || car.category || 'Sedan';
   const carYear = car.year || '';
   
-  // FIXED IMAGE HANDLING
+  // FIXED IMAGE HANDLING - Handle both static and uploaded images
   let carImage = "https://via.placeholder.com/400x300?text=No+Image";
 
   if (car.image) {
     const imgStr = String(car.image).trim();
     
+    // Extract filename from any path format
+    const filename = imgStr.split('/').pop();
+    
+    // Check if it's a static image we have imported
+    if (imageMap[filename]) {
+      carImage = imageMap[filename];
+    }
     // Check if it's already a full URL
-    if (imgStr.startsWith("http://") || imgStr.startsWith("https://")) {
+    else if (imgStr.startsWith("http://") || imgStr.startsWith("https://")) {
       carImage = imgStr;
-    } 
-    // Handle /src/assets/ paths (development paths that need fixing)
-    else if (imgStr.startsWith("/src/assets/")) {
-      // Extract just the filename and use it from uploads
-      const filename = imgStr.split("/").pop();
-      carImage = `${API_URL}/uploads/cars/${filename}`;
     }
-    // Check if it's a relative path starting with /
-    else if (imgStr.startsWith("/")) {
-      carImage = `${API_URL}${imgStr}`;
-    }
-    // Check if it's just a filename
-    else if (imgStr.includes(".jpg") || imgStr.includes(".png") || imgStr.includes(".jpeg") || imgStr.includes(".webp")) {
-      carImage = `${API_URL}/uploads/cars/${imgStr}`;
-    }
-    // Default: treat as filename
+    // Otherwise, try to load from backend uploads
     else {
-      carImage = `${API_URL}/uploads/cars/${imgStr}`;
+      carImage = `${API_URL}/uploads/cars/${filename}`;
     }
   }
   
