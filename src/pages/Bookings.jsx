@@ -89,7 +89,7 @@ function Bookings() {
             return (
               <div
                 key={booking._id}
-                className="border border-gray-800 p-6 rounded-lg shadow-lg bg-gray-900 hover:shadow-orange-500/20 transition"
+                className="border border-gray-800 p-5 rounded-lg shadow-lg bg-gradient-to-r from-purple-950/20 via-purple-900/30 to-gray-900/30 mx-8 hover:shadow-orange-500/20 transition"
               >
                 {carImage && (
                   <div className="mb-4">
@@ -100,7 +100,7 @@ function Bookings() {
                           : `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/uploads/cars/${carImage}`
                       }
                       alt={`${carMake} ${carModel}`}
-                      className="w-full h-48 object-cover rounded"
+                      className="w-full h-65 object-cover rounded"
                       onError={(e) => {
                         e.target.src = "https://via.placeholder.com/400x300?text=Car+Image";
                       }}
