@@ -1,25 +1,17 @@
 import React, { useState } from "react";
 import BookingModal from "../pages/BookingModal";
 
-// Import static images
-import C1 from "../assets/C1.png";
-import C2 from "../assets/C2.png";
-import C3 from "../assets/C3.png";
-import C4 from "../assets/C4.png";
-import C5 from "../assets/C5.png";
-import C6 from "../assets/C6.png";
-
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
-// Map image names to imported images
-const imageMap = {
-  'C1.png': C1,
-  'C2.png': C2,
-  'C3.png': C3,
-  'C4.png': C4,
-  'C5.png': C5,
-  'C6.png': C6,
-};
+// Dynamically import all images from assets folder
+const images = import.meta.glob('../assets/*.{png,jpg,jpeg,webp}', { eager: true });
+
+// Create a map of filenames to their imported URLs
+const imageMap = {};
+Object.keys(images).forEach(path => {
+  const filename = path.split('/').pop(); // Get filename like "C1.png"
+  imageMap[filename] = images[path].default;
+});
 
 function CarCard({ car, onBookingSuccess }) {
   const [showModal, setShowModal] = useState(false);
@@ -35,12 +27,22 @@ function CarCard({ car, onBookingSuccess }) {
   if (car.image) {
     const imgStr = String(car.image).trim();
     
-    // Extract filename from any path format
-    const filename = imgStr.split('/').pop();
+    // Extract filename from any path format (handles both "C1.png" and paths like "/src/assets/C1.png")
+    let filename = imgStr.split('/').pop();
+    
+    // Remove any hash that Vite might have added (e.g., C4-CYFdTQLB.png -> C4.png)
+    // This regex matches patterns like C4-XXXXXXXX.png and extracts C4.png
+    const hashMatch = filename.match(/^([A-Za-z0-9]+)-[A-Za-z0-9_-]+\.(\w+)$/);
+    if (hashMatch) {
+      filename = `${hashMatch[1]}.${hashMatch[2]}`; // Reconstruct as C4.png
+    }
+    
+    console.log('Original:', imgStr, '| Cleaned filename:', filename);
     
     // Check if it's a static image we have imported
     if (imageMap[filename]) {
       carImage = imageMap[filename];
+      console.log('Found in imageMap:', filename);
     }
     // Check if it's already a full URL
     else if (imgStr.startsWith("http://") || imgStr.startsWith("https://")) {
@@ -49,6 +51,7 @@ function CarCard({ car, onBookingSuccess }) {
     // Otherwise, try to load from backend uploads
     else {
       carImage = `${API_URL}/uploads/cars/${filename}`;
+      console.log('Loading from backend:', carImage);
     }
   }
   
