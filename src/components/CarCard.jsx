@@ -11,21 +11,32 @@ function CarCard({ car, onBookingSuccess }) {
   const carType = car.type || car.category || 'Sedan';
   const carYear = car.year || '';
   
+  // FIXED IMAGE HANDLING
   let carImage = "https://via.placeholder.com/400x300?text=No+Image";
 
   if (car.image) {
     const imgStr = String(car.image).trim();
     
-    if (
-      !imgStr.includes("/") &&
-      (imgStr.endsWith(".jpg") ||
-        imgStr.endsWith(".png") ||
-        imgStr.endsWith(".jpeg"))
-    ) {
-      carImage = `${API_URL}/uploads/cars/${imgStr}`;
-    } else if (imgStr.startsWith("http") || imgStr.startsWith("/src")) {
+    // Check if it's already a full URL
+    if (imgStr.startsWith("http://") || imgStr.startsWith("https://")) {
       carImage = imgStr;
-    } else {
+    } 
+    // Handle /src/assets/ paths (development paths that need fixing)
+    else if (imgStr.startsWith("/src/assets/")) {
+      // Extract just the filename and use it from uploads
+      const filename = imgStr.split("/").pop();
+      carImage = `${API_URL}/uploads/cars/${filename}`;
+    }
+    // Check if it's a relative path starting with /
+    else if (imgStr.startsWith("/")) {
+      carImage = `${API_URL}${imgStr}`;
+    }
+    // Check if it's just a filename
+    else if (imgStr.includes(".jpg") || imgStr.includes(".png") || imgStr.includes(".jpeg") || imgStr.includes(".webp")) {
+      carImage = `${API_URL}/uploads/cars/${imgStr}`;
+    }
+    // Default: treat as filename
+    else {
       carImage = `${API_URL}/uploads/cars/${imgStr}`;
     }
   }
@@ -42,7 +53,7 @@ function CarCard({ car, onBookingSuccess }) {
   const handleBookingSuccess = () => {
     setShowModal(false);
     if (onBookingSuccess) {
-      onBookingSuccess(); // Trigger refresh in parent
+      onBookingSuccess();
     }
   };
 
@@ -50,7 +61,7 @@ function CarCard({ car, onBookingSuccess }) {
     <>
       <div className="relative bg-gradient-to-b from-black/60 to-black/90 rounded-2xl border border-[#222] hover:border-orange-500 transition-all duration-300 overflow-hidden shadow-md w-full max-w-[320px] mx-auto flex flex-col justify-between hover:scale-[1.05]">
 
-        <div className="absolute top-3 right-3">
+        <div className="absolute top-3 right-3 z-10">
           {isAvailable ? (
             <span className="bg-green-200 text-green-800 text-xs font-semibold px-2 py-1 rounded-md">
               Available
@@ -73,6 +84,7 @@ function CarCard({ car, onBookingSuccess }) {
             alt={carName}
             className="w-full h-full object-cover"
             onError={(e) => {
+              console.error("Image failed to load:", carImage);
               e.target.src = "https://via.placeholder.com/400x300?text=No+Image";
             }}
           />
